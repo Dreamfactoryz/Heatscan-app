@@ -1,0 +1,53 @@
+# Starts an Android test build on Expo (EAS) from the GitHub website or app.
+# One-time setup: add a repository secret named EXPO_TOKEN (an Expo access token).
+# Then: Actions tab > "Build Android app" > Run workflow. The build itself runs on Expo;
+# the install link appears on expo.dev under the heat-scan project.
+name: Build Android app
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: "preview = installable test build, production = store build"
+        type: choice
+        options: [preview, production]
+        default: preview
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Check EXPO_TOKEN is set
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "::error::Add a repository secret named EXPO_TOKEN (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: npm ci
+
+      - run: npm test
+
+      # Links the project to the Expo account on the first run (creates it if needed).
+      - name: Link Expo project
+        run: |
+          if ! grep -q '"projectId"' app.json; then
+            eas init --non-interactive --force
+          fi
+
+      - name: Start build on Expo
+        run: eas build --platform android --profile ${{ inputs.profile }} --non-interactive --no-wait

@@ -65,3 +65,10 @@ If the app is only for your own crew, you can skip public listing: use TestFligh
 
 - `app.json`: app name, version, icons, permissions text, app ID.
 - `eas.json`: build profiles (`development`, `preview` for an installable Android APK, `production` for the stores).
+
+## Build from your phone (no computer)
+
+1. On expo.dev: Account settings → Access tokens → create a token and copy it.
+2. On GitHub: this repo → Settings → Secrets and variables → Actions → New repository secret. Name `EXPO_TOKEN`, paste the token.
+3. On GitHub: Actions tab → **Build Android app** → Run workflow (profile `preview`).
+4. After 15–20 minutes the build appears on expo.dev under the `heat-scan` project. Open it on your Android phone and tap Install.
