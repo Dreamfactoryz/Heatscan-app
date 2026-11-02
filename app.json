@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "Heat Scan",
+    "slug": "heat-scan",
+    "scheme": "heatscan",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#0b0f15",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0b0f15"
+    },
+    "ios": {
+      "bundleIdentifier": "com.heatscan.field",
+      "buildNumber": "1",
+      "supportsTablet": false,
+      "config": { "usesNonExemptEncryption": false },
+      "infoPlist": {
+        "NSCameraUsageDescription": "Heat Scan uses the camera to photograph heat numbers, P&ID drawings, dye pen tests and finished spools.",
+        "NSPhotoLibraryUsageDescription": "Heat Scan lets you pick existing photos of heat numbers, drawings and spools."
+      }
+    },
+    "android": {
+      "package": "com.heatscan.field",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#0b0f15",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": ["android.permission.CAMERA"],
+      "blockedPermissions": ["android.permission.RECORD_AUDIO"],
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Heat Scan uses the camera to photograph heat numbers, P&ID drawings, dye pen tests and finished spools.",
+          "photosPermission": "Heat Scan lets you pick existing photos of heat numbers, drawings and spools.",
+          "microphonePermission": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
