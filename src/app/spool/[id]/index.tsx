@@ -349,6 +349,18 @@ export default function SpoolScreen() {
         </View>
       </Section>
 
+      <View style={{ marginTop: 28, gap: 10 }}>
+        {confirm === 'spool:' + sp.id ? (
+          <>
+            <Muted>{'This deletes ' + sp.name + ' with all its heat numbers, welds, photos and drawings. It cannot be undone.'}</Muted>
+            <Btn kind="danger" icon="trash" title="Yes, delete this spool" onPress={() => { router.back(); deleteSpool(sp.id); }} />
+            <Btn title="Keep it" onPress={() => setConfirm(null)} />
+          </>
+        ) : (
+          <Btn icon="trash" title="Delete spool" onPress={() => setConfirm('spool:' + sp.id)} />
+        )}
+      </View>
+
       {/* ---------- sheets ---------- */}
       <SpoolSheet
         visible={sheet?.kind === 'edit'}
