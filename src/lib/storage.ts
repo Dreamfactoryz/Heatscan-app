@@ -1,6 +1,6 @@
 import { Directory, File, Paths } from 'expo-file-system';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
-import { DEFAULT_SETTINGS, type AppData, uid } from './types';
+import { DEFAULT_FABRICATORS, DEFAULT_SETTINGS, type AppData, uid } from './types';
 
 // Everything lives in the app's private documents folder:
 //   heatscan.json   all spools and settings
@@ -18,7 +18,9 @@ export async function loadData(): Promise<AppData> {
   if (!f.exists) return emptyData();
   try {
     const d = JSON.parse(await f.text());
-    return { version: 1, spools: d.spools || {}, settings: { ...DEFAULT_SETTINGS, ...(d.settings || {}) } };
+    const settings = { ...DEFAULT_SETTINGS, ...(d.settings || {}) };
+    if (!Array.isArray(settings.fabricators) || !settings.fabricators.length) settings.fabricators = [...DEFAULT_FABRICATORS];
+    return { version: 1, spools: d.spools || {}, settings };
   } catch {
     // Keep the unreadable file so nothing is lost, and start clean.
     try {

@@ -19,7 +19,7 @@ export function stamp() {
 // Same columns as the web app's CSV.
 export function buildCsv(list: Spool[], ndt: NdtResult) {
   const rows: unknown[][] = [
-    ['Spool', 'Location', 'Row', 'No.', 'Heat number', 'Item', 'Size', 'Class / schedule', 'Material', 'Read confidence', 'Weld type', 'Shop / field', 'Joins', 'NDT', 'Comments', 'Captured', 'Operator', 'Photo file'],
+    ['Spool', 'Location', 'Row', 'No.', 'Heat number', 'Item', 'Size', 'Class / schedule', 'Material', 'Read confidence', 'Weld type', 'Shop / field', 'Joins', 'NDT', 'Comments', 'Captured', 'Fabricator', 'Photo file'],
   ];
   for (const sp of list) {
     sp.items.forEach((it, i) => {

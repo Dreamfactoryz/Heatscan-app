@@ -17,6 +17,7 @@ export default function Settings() {
   const st = data.settings;
   const [f, setF] = useState({ xe: String(st.xrayEvery), de: String(st.dpEvery), psb: String(st.priorShopButt), pf: String(st.priorFillet) });
   const [key, setKey] = useState('');
+  const [newFab, setNewFab] = useState('');
   const [hasKey, setHasKey] = useState(false);
 
   useEffect(() => {
@@ -33,6 +34,29 @@ export default function Settings() {
       </View>
       <Eyebrow>Settings</Eyebrow>
       <H1>Heat Scan</H1>
+
+      <Section title="Fabricators" count={st.fabricators.length}>
+        <View>
+          {st.fabricators.map((name) => (
+            <View key={name} style={{ flexDirection: 'row', alignItems: 'center', minHeight: 52, borderBottomWidth: 1, borderColor: t.line }}>
+              <Text style={{ flex: 1, color: t.ink, fontSize: 16, fontWeight: font.sb }}>{name}</Text>
+              {st.fabricators.length > 1 ? (
+                <IconBtn icon="trash" label={'Remove ' + name} onPress={() => saveSettings({ fabricators: st.fabricators.filter((x) => x !== name) })} />
+              ) : null}
+            </View>
+          ))}
+        </View>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <Field value={newFab} onChangeText={setNewFab} placeholder="Add a fabricator" autoCapitalize="words" />
+          <Btn kind="yellow" title="Add" style={{ paddingHorizontal: 18 }} disabled={!newFab.trim()} onPress={() => {
+            const n = newFab.trim().replace(/\s+/g, ' ');
+            if (st.fabricators.some((x) => x.toLowerCase() === n.toLowerCase())) return toast(n + ' is already on the list');
+            saveSettings({ fabricators: [...st.fabricators, n] });
+            setNewFab('');
+          }} />
+        </View>
+        <Muted>These names appear in the Fabricator dropdown on each spool.</Muted>
+      </Section>
 
       <Section title="Inspection sampling">
         <View style={{ flexDirection: 'row', gap: 12 }}>

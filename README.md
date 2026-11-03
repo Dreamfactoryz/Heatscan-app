@@ -4,7 +4,7 @@ Phone app for capturing heat numbers on pipe spools: photograph each flange, pip
 
 ## What it does
 
-- **Spools** with a name, job/location and operator name.
+- **Spools** with a name, job/location and fabricator (picked from a list you manage in Settings).
 - **Heat numbers by photo.** The app reads the mark and suggests the heat number, item type, size, class/schedule and material. You check it, pick a look-alike reading if needed (0/O, 1/I, 5/S, 8/B, 2/Z) and save. You can also type a number in. Each item has a comments box.
 - **Welds** between items, with a type (Butt, Socket, Fillet) and Shop Weld or Field Weld.
 - **NDT warnings.** By default 1 in 10 shop butt welds needs X-ray and 1 in 5 fillet welds needs dye pen, counted across every spool on the phone. You can change the rates and the counts carried over from before in Settings. Each warning can be marked booked.

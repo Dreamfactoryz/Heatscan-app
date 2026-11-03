@@ -13,6 +13,7 @@ import { readMark } from '../../../lib/reader';
 import { deletePhoto, photoUri, storePhoto } from '../../../lib/storage';
 import { useStore } from '../../../lib/store';
 import { useTheme } from '../../../lib/theme';
+import { fabricatorOptions } from '../../../lib/fabricators';
 import { descOf, fmt, ITEM_TYPES, ord, pad, uid, WELD_LOCS, WELD_TYPES, type Item, type Spool } from '../../../lib/types';
 
 type SheetState =
@@ -36,7 +37,7 @@ export default function SpoolScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const t = useTheme();
   const toast = useToast();
-  const { data, ndt, updateSpool, deleteSpool } = useStore();
+  const { data, ndt, updateSpool, deleteSpool, saveSettings } = useStore();
   const sp = data.spools[id];
 
   const [review, setReview] = useState<Review | null>(null);
@@ -44,7 +45,6 @@ export default function SpoolScreen() {
   reviewRef.current = review;
   const abortRef = useRef<AbortController | null>(null);
   const [openItem, setOpenItem] = useState<string | null>(null);
-  const [opEdit, setOpEdit] = useState<string | null>(null);
   const [sheet, setSheet] = useState<SheetState>(null);
   const [confirm, setConfirm] = useState<string | null>(null);
   const [finUp, setFinUp] = useState(0);
@@ -280,21 +280,14 @@ export default function SpoolScreen() {
       </View>
       <SpoolTags sp={sp} due={ndt.due[sp.id] || 0} />
 
-      {opEdit != null ? (
-        <View style={{ flexDirection: 'row', gap: 8, marginTop: 14 }}>
-          <Field value={opEdit} onChangeText={setOpEdit} placeholder="Your name" autoFocus autoComplete="name" />
-          <Btn kind="yellow" title="Save" style={{ paddingHorizontal: 18 }} onPress={() => { updateSpool(sp.id, (s) => { s.operator = opEdit.trim(); }); setOpEdit(null); }} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 20 }}>
+        <Tile icon="user" />
+        <View style={{ flex: 1 }}>
+          <Label>Fabricator</Label>
+          <Choice value={sp.operator} placeholder="Choose fabricator" warnIfEmpty title="Fabricator" options={fabricatorOptions(data.settings.fabricators, sp.operator)}
+            onChange={(v) => { updateSpool(sp.id, (s) => { s.operator = v; }); saveSettings({ lastOperator: v }); }} />
         </View>
-      ) : (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginTop: 20 }}>
-          <Tile icon="user" />
-          <View style={{ flex: 1 }}>
-            <Label>Operator</Label>
-            <Text style={{ fontWeight: font.b, fontSize: 16, color: sp.operator ? t.accentText : t.warn, marginTop: -4 }}>{sp.operator || 'Add your name'}</Text>
-          </View>
-          <IconBtn icon="pen" label="Change operator" onPress={() => setOpEdit(sp.operator || '')} />
-        </View>
-      )}
+      </View>
 
       {review ? (
         <ReviewCard rv={review} number={pad(n + 1)} dup={!!review.heat.trim() && sp.items.some((x) => x.heat === review.heat.toUpperCase().trim())}
@@ -362,6 +355,7 @@ export default function SpoolScreen() {
         visible={sheet?.kind === 'edit'}
         onClose={() => setSheet(null)}
         initial={{ name: sp.name, location: sp.location, operator: sp.operator }}
+        fabricators={data.settings.fabricators}
         onSave={(f) => {
           if (!f.name.trim()) return toast('Give the spool a name first');
           updateSpool(sp.id, (s) => { s.name = f.name.trim(); s.location = f.location.trim(); s.operator = f.operator.trim(); });

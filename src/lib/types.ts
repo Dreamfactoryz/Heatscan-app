@@ -22,6 +22,7 @@ export type Item = {
   by: string;
 };
 
+// Spool.operator / Item.by hold the fabricator's name (field names kept for saved data).
 // welds[i] joins items[i] and items[i + 1].
 export type Weld = { type: string; loc: string; ndt: '' | 'xray' | 'dp' };
 
@@ -61,9 +62,11 @@ export type Settings = {
   priorShopButt: number;
   priorFillet: number;
   lastOperator: string;
+  fabricators: string[]; // names offered in the Fabricator dropdown
 };
 
-export const DEFAULT_SETTINGS: Settings = { xrayEvery: 10, dpEvery: 5, priorShopButt: 0, priorFillet: 0, lastOperator: '' };
+export const DEFAULT_FABRICATORS = ['Richard King'];
+export const DEFAULT_SETTINGS: Settings = { xrayEvery: 10, dpEvery: 5, priorShopButt: 0, priorFillet: 0, lastOperator: '', fabricators: DEFAULT_FABRICATORS };
 
 export type AppData = { version: 1; spools: Record<string, Spool>; settings: Settings };
 
