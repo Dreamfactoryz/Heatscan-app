@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { fabricatorOptions } from '../lib/fabricators';
-import { Btn, Choice, Field, Label, Sheet } from './ui';
+import { FabricatorPicker } from './FabricatorPicker';
+import { Btn, Field, Label, Sheet } from './ui';
 import { View } from 'react-native';
 
 type F = { name: string; location: string; operator: string };
@@ -25,7 +25,7 @@ export function SpoolSheet({ visible, onClose, initial, onSave, onDelete, fabric
       <Field label="Job / location" value={f.location} onChangeText={(location) => setF({ ...f, location })} placeholder="e.g. Rack 3, Bay 2" />
       <View>
         <Label>Fabricator</Label>
-        <Choice value={f.operator} placeholder="Choose fabricator" title="Fabricator" options={fabricatorOptions(fabricators, f.operator)} onChange={(operator) => setF({ ...f, operator })} />
+        <FabricatorPicker value={f.operator} onChange={(operator) => setF({ ...f, operator })} />
       </View>
       <Btn kind="yellow" title={edit ? 'Save changes' : 'Create spool'} onPress={() => onSave(f)} />
       {onDelete ? (

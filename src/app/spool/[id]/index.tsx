@@ -13,7 +13,7 @@ import { readMark } from '../../../lib/reader';
 import { deletePhoto, photoUri, storePhoto } from '../../../lib/storage';
 import { useStore } from '../../../lib/store';
 import { useTheme } from '../../../lib/theme';
-import { fabricatorOptions } from '../../../lib/fabricators';
+import { FabricatorPicker } from '../../../components/FabricatorPicker';
 import { descOf, fmt, ITEM_TYPES, ord, pad, uid, WELD_LOCS, WELD_TYPES, type Item, type Spool } from '../../../lib/types';
 
 type SheetState =
@@ -284,8 +284,7 @@ export default function SpoolScreen() {
         <Tile icon="user" />
         <View style={{ flex: 1 }}>
           <Label>Fabricator</Label>
-          <Choice value={sp.operator} placeholder="Choose fabricator" warnIfEmpty title="Fabricator" options={fabricatorOptions(data.settings.fabricators, sp.operator)}
-            onChange={(v) => { updateSpool(sp.id, (s) => { s.operator = v; }); saveSettings({ lastOperator: v }); }} />
+          <FabricatorPicker value={sp.operator} onChange={(v) => { updateSpool(sp.id, (s) => { s.operator = v; }); saveSettings({ lastOperator: v }); }} />
         </View>
       </View>
 
