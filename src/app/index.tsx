@@ -78,7 +78,7 @@ export default function Home() {
       <SpoolSheet
         visible={newOpen}
         onClose={() => setNewOpen(false)}
-        initial={{ name: '', location: '', operator: data.settings.fabricators.includes(data.settings.lastOperator) ? data.settings.lastOperator : data.settings.fabricators[0] || '' }}
+        initial={{ name: '', location: data.settings.locations.includes(data.settings.lastLocation) ? data.settings.lastLocation : data.settings.locations[0] || '', operator: data.settings.fabricators.includes(data.settings.lastOperator) ? data.settings.lastOperator : data.settings.fabricators[0] || '' }}
         fabricators={data.settings.fabricators}
         onSave={(f) => {
           if (!f.name.trim()) {

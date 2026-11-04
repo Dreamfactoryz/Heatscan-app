@@ -17,7 +17,6 @@ export default function Settings() {
   const st = data.settings;
   const [f, setF] = useState({ xe: String(st.xrayEvery), de: String(st.dpEvery), psb: String(st.priorShopButt), pf: String(st.priorFillet) });
   const [key, setKey] = useState('');
-  const [newFab, setNewFab] = useState('');
   const [hasKey, setHasKey] = useState(false);
 
   useEffect(() => {
@@ -35,28 +34,10 @@ export default function Settings() {
       <Eyebrow>Settings</Eyebrow>
       <H1>Heat Scan</H1>
 
-      <Section title="Fabricators" count={st.fabricators.length}>
-        <View>
-          {st.fabricators.map((name) => (
-            <View key={name} style={{ flexDirection: 'row', alignItems: 'center', minHeight: 52, borderBottomWidth: 1, borderColor: t.line }}>
-              <Text style={{ flex: 1, color: t.ink, fontSize: 16, fontWeight: font.sb }}>{name}</Text>
-              {st.fabricators.length > 1 ? (
-                <IconBtn icon="trash" label={'Remove ' + name} onPress={() => saveSettings({ fabricators: st.fabricators.filter((x) => x !== name) })} />
-              ) : null}
-            </View>
-          ))}
-        </View>
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          <Field value={newFab} onChangeText={setNewFab} placeholder="Add a fabricator" autoCapitalize="words" />
-          <Btn kind="yellow" title="Add" style={{ paddingHorizontal: 18 }} disabled={!newFab.trim()} onPress={() => {
-            const n = newFab.trim().replace(/\s+/g, ' ');
-            if (st.fabricators.some((x) => x.toLowerCase() === n.toLowerCase())) return toast(n + ' is already on the list');
-            saveSettings({ fabricators: [...st.fabricators, n] });
-            setNewFab('');
-          }} />
-        </View>
-        <Muted>These names appear in the Fabricator dropdown on each spool.</Muted>
-      </Section>
+      <ListSection title="Fabricators" items={st.fabricators} addPlaceholder="Add a fabricator"
+        note="These names appear in the Fabricator dropdown on each spool." onChange={(fabricators) => saveSettings({ fabricators })} />
+      <ListSection title="Locations" items={st.locations} addPlaceholder="Add a location"
+        note="These places appear in the Location dropdown on each spool." onChange={(locations) => saveSettings({ locations })} />
 
       <Section title="Inspection sampling">
         <View style={{ flexDirection: 'row', gap: 12 }}>
@@ -101,5 +82,36 @@ export default function Settings() {
         <Muted style={{ fontSize: 12 }}>{'Version ' + (Constants.expoConfig?.version || '')}</Muted>
       </Section>
     </Screen>
+  );
+}
+
+// Editable list of names for a dropdown (add and remove; at least one stays).
+function ListSection({ title, items, addPlaceholder, note, onChange }: {
+  title: string; items: string[]; addPlaceholder: string; note: string; onChange: (items: string[]) => void;
+}) {
+  const t = useTheme();
+  const toast = useToast();
+  const [draft, setDraft] = useState('');
+  return (
+    <Section title={title} count={items.length}>
+      <View>
+        {items.map((name) => (
+          <View key={name} style={{ flexDirection: 'row', alignItems: 'center', minHeight: 52, borderBottomWidth: 1, borderColor: t.line }}>
+            <Text style={{ flex: 1, color: t.ink, fontSize: 16, fontWeight: font.sb }}>{name}</Text>
+            {items.length > 1 ? <IconBtn icon="trash" label={'Remove ' + name} onPress={() => onChange(items.filter((x) => x !== name))} /> : null}
+          </View>
+        ))}
+      </View>
+      <View style={{ flexDirection: 'row', gap: 8 }}>
+        <Field value={draft} onChangeText={setDraft} placeholder={addPlaceholder} autoCapitalize="words" />
+        <Btn kind="yellow" title="Add" style={{ paddingHorizontal: 18 }} disabled={!draft.trim()} onPress={() => {
+          const n = draft.trim().replace(/\s+/g, ' ');
+          if (items.some((x) => x.toLowerCase() === n.toLowerCase())) return toast(n + ' is already on the list');
+          onChange([...items, n]);
+          setDraft('');
+        }} />
+      </View>
+      <Muted>{note}</Muted>
+    </Section>
   );
 }

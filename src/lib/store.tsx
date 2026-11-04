@@ -46,7 +46,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       const now = Date.now();
       const sp: Spool = { id, ...f, createdAt: now, updatedAt: now, items: [], welds: [], drawings: [], dyePen: [], finished: [] };
       const cur = ref.current;
-      commit({ ...cur, spools: { ...cur.spools, [id]: sp }, settings: { ...cur.settings, lastOperator: f.operator || cur.settings.lastOperator } });
+      commit({ ...cur, spools: { ...cur.spools, [id]: sp }, settings: { ...cur.settings, lastOperator: f.operator || cur.settings.lastOperator, lastLocation: f.location || cur.settings.lastLocation } });
       return id;
     },
     [commit],

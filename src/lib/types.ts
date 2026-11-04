@@ -63,10 +63,13 @@ export type Settings = {
   priorFillet: number;
   lastOperator: string;
   fabricators: string[]; // names offered in the Fabricator dropdown
+  lastLocation: string;
+  locations: string[]; // places offered in the Location dropdown
 };
 
 export const DEFAULT_FABRICATORS = ['Richard King'];
-export const DEFAULT_SETTINGS: Settings = { xrayEvery: 10, dpEvery: 5, priorShopButt: 0, priorFillet: 0, lastOperator: '', fabricators: DEFAULT_FABRICATORS };
+export const DEFAULT_LOCATIONS = ['Waiuku WWTP Interim Upgrade'];
+export const DEFAULT_SETTINGS: Settings = { xrayEvery: 10, dpEvery: 5, priorShopButt: 0, priorFillet: 0, lastOperator: '', fabricators: DEFAULT_FABRICATORS, lastLocation: '', locations: DEFAULT_LOCATIONS };
 
 export type AppData = { version: 1; spools: Record<string, Spool>; settings: Settings };
 

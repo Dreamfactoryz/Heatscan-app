@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FabricatorPicker } from './FabricatorPicker';
+import { FabricatorPicker, LocationPicker } from './FabricatorPicker';
 import { Btn, Field, Label, Sheet } from './ui';
 import { View } from 'react-native';
 
@@ -22,7 +22,10 @@ export function SpoolSheet({ visible, onClose, initial, onSave, onDelete, fabric
   return (
     <Sheet visible={visible} onClose={onClose} eyebrow={edit ? 'Edit spool' : 'New spool'} title={edit ? 'Spool details' : 'What are you working on?'}>
       <Field label="Spool / pipe name" value={f.name} onChangeText={(name) => setF({ ...f, name })} placeholder="e.g. Pipe 1 SP-03" autoFocus={!edit} />
-      <Field label="Job / location" value={f.location} onChangeText={(location) => setF({ ...f, location })} placeholder="e.g. Rack 3, Bay 2" />
+      <View>
+        <Label>Location</Label>
+        <LocationPicker value={f.location} onChange={(location) => setF({ ...f, location })} />
+      </View>
       <View>
         <Label>Fabricator</Label>
         <FabricatorPicker value={f.operator} onChange={(operator) => setF({ ...f, operator })} />
