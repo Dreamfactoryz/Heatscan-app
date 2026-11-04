@@ -4,7 +4,8 @@ import { Alert, Image, PanResponder, Pressable, ScrollView, Text, useWindowDimen
 import Svg, { Polyline } from 'react-native-svg';
 import { Icon } from '../../../../components/Icon';
 import { Screen } from '../../../../components/Screen';
-import { Btn, Empty, Eyebrow, Field, font, H1, IconBtn, Muted, Section } from '../../../../components/ui';
+import { Btn, Empty, Eyebrow, Field, font, H1, IconBtn, Muted, Section, useToast } from '../../../../components/ui';
+import { exportDrawing } from '../../../../lib/export';
 import { deletePhoto, photoUri } from '../../../../lib/storage';
 import { useStore } from '../../../../lib/store';
 import { HIGHLIGHT_COLORS, useTheme } from '../../../../lib/theme';
@@ -31,6 +32,8 @@ export default function DrawingScreen() {
   const [label, setLabel] = useState('');
   const [touching, setTouching] = useState(false);
   const [confirmDel, setConfirmDel] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const toast = useToast();
 
   const uri = d ? photoUri(d.photo) : '';
   useEffect(() => {
@@ -119,8 +122,13 @@ export default function DrawingScreen() {
 
   return (
     <Screen scrollEnabled={!touching}>
-      <View style={{ marginBottom: 18 }}>
+      <View style={{ marginBottom: 18, flexDirection: 'row', justifyContent: 'space-between' }}>
         <IconBtn round icon="back" label="Back to drawings" onPress={() => router.back()} />
+        <IconBtn round icon="share" label="Share drawing with highlights" disabled={sharing} onPress={async () => {
+          if (strokes.length) return toast('Save the highlight first');
+          setSharing(true);
+          try { await exportDrawing(sp, d); } catch (e) { toast(e instanceof Error ? e.message : 'Could not share'); } finally { setSharing(false); }
+        }} />
       </View>
       <Eyebrow>{[d.number || 'Drawing', d.title].filter(Boolean).join(' · ')}</Eyebrow>
       <H1 small>Highlight a line</H1>

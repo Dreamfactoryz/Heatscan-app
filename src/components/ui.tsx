@@ -60,10 +60,10 @@ export function Btn({ title, onPress, icon, kind = 'quiet', disabled, style, bus
   );
 }
 
-export function IconBtn({ icon, onPress, label, round, color }: { icon: string; onPress: () => void; label: string; round?: boolean; color?: string }) {
+export function IconBtn({ icon, onPress, label, round, color, disabled }: { icon: string; onPress: () => void; label: string; round?: boolean; color?: string; disabled?: boolean }) {
   const t = useTheme();
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} hitSlop={6}
+    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} disabled={disabled} hitSlop={6}
       style={({ pressed }) => ({ width: 48, height: 48, borderRadius: round ? 24 : 12, alignItems: 'center', justifyContent: 'center', backgroundColor: round ? t.surface2 : 'transparent', opacity: pressed ? 0.6 : 1 })}>
       <Icon name={icon} color={color || (round ? t.ink : t.muted)} />
     </Pressable>
